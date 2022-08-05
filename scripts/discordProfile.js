@@ -12,11 +12,17 @@ socket.addEventListener("open", () => {
     );
 
     socket.addEventListener("message", ({ data }) => {
-        const message = JSON.parse(data);
-        if (message.op == 1){
-            HEARTBEAT = message.d.heartbeat_interval;
+        const statusData = JSON.parse(data).d;
+        if (statusData.op == 1){
+            HEARTBEAT = statusData.heartbeat_interval;
         }else{
-            console.log(JSON.parse(data));
+            console.log(statusData);
+            profileImage(statusData.discord_user.id, statusData.discord_user.avatar);
+            checkDiscordStatus(statusData.discord_status);
+
+            if (statusData.discord_status != "offline"){
+                
+            }
         }
     });
 
@@ -26,26 +32,24 @@ socket.addEventListener("open", () => {
                 op: 3,
             }),
         );
-        console.log("3");
     }, HEARTBEAT);
 });
 
 async function checkDiscordStatus(status){
+    if (status === "offline"){
+        document.getElementById("statusImage").src = "./images/offline.png";
+    }
     if (status === "online"){
-        //change img src
+        document.getElementById("statusImage").src = "./images/online.png";
     }
     if (status === "idle"){
-        //change img src
+        document.getElementById("statusImage").src = "./images/idle.png";
     }
     if (status === "dnd"){
-        //change img src
-    }
-    if (status === "offline"){
-        //change img src
+        document.getElementById("statusImage").src = "./images/dnd.png";
     }
 }
 
 async function profileImage(userId, avatarId){
-    //set image to url 
-    const url = `https://cdn.discordapp.com/avatars/${userId}/${avatarId}.png`;
+    document.getElementById("profileImage").src = `https://cdn.discordapp.com/avatars/${userId}/${avatarId}.png`;
 }
