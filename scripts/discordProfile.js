@@ -11,21 +11,6 @@ socket.addEventListener("open", () => {
         }),
     );
 
-    socket.addEventListener("message", ({ data }) => {
-        const statusData = JSON.parse(data).d;
-        if (statusData.op == 1){
-            HEARTBEAT = statusData.heartbeat_interval;
-        }else{
-            console.log(statusData);
-            profileImage(statusData.discord_user.id, statusData.discord_user.avatar);
-            checkDiscordStatus(statusData.discord_status);
-
-            if (statusData.discord_status != "offline"){
-                
-            }
-        }
-    });
-
     setInterval(() => {
         socket.send(
             JSON.stringify({
@@ -35,19 +20,22 @@ socket.addEventListener("open", () => {
     }, HEARTBEAT);
 });
 
+socket.addEventListener("message", ({ data }) => {
+    const statusData = JSON.parse(data).d;
+    console.log(statusData);
+
+    if (statusData.op != 1){
+        profileImage(statusData.discord_user.id, statusData.discord_user.avatar);
+        checkDiscordStatus(statusData.discord_status);
+
+        if (statusData.discord_status != "offline"){
+            
+        }
+    }
+});
+
 async function checkDiscordStatus(status){
-    if (status === "offline"){
-        document.getElementById("statusImage").src = "./images/offline.png";
-    }
-    if (status === "online"){
-        document.getElementById("statusImage").src = "./images/online.png";
-    }
-    if (status === "idle"){
-        document.getElementById("statusImage").src = "./images/idle.png";
-    }
-    if (status === "dnd"){
-        document.getElementById("statusImage").src = "./images/dnd.png";
-    }
+    document.getElementById("statusImage").src = `./images/${status}.png`;
 }
 
 async function profileImage(userId, avatarId){
