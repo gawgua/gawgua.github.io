@@ -11,6 +11,23 @@ socket.addEventListener("open", () => {
         }),
     );
 
+    socket.addEventListener("message", ({ data }) => {
+        const statusData = JSON.parse(data).d;
+        console.log(statusData);
+    
+        if (statusData.op != 1){
+            profileImage(statusData.discord_user.id, statusData.discord_user.avatar);
+            checkDiscordStatus(statusData.discord_status);
+    
+            if (statusData.discord_status != "offline"){
+                
+            }
+        }else{
+            HEARTBEAT = message.d.heartbeat_interval;
+        }
+        
+    });
+
     setInterval(() => {
         socket.send(
             JSON.stringify({
@@ -18,20 +35,6 @@ socket.addEventListener("open", () => {
             }),
         );
     }, HEARTBEAT);
-});
-
-socket.addEventListener("message", ({ data }) => {
-    const statusData = JSON.parse(data).d;
-    console.log(statusData);
-
-    if (statusData.op != 1){
-        profileImage(statusData.discord_user.id, statusData.discord_user.avatar);
-        checkDiscordStatus(statusData.discord_status);
-
-        if (statusData.discord_status != "offline"){
-            
-        }
-    }
 });
 
 async function checkDiscordStatus(status){

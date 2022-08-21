@@ -9,48 +9,48 @@
     font-family: 'Alumni Sans Pinstripe';
 }
 
-#bgVideo{
+#bg{
     position: fixed;
-    object-fit: contain;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
     right: 0;
-    bottom: 0;
-    max-width: 100vw;
+    background: linear-gradient(45deg, rgba(155,194,178,1) 0%, rgba(140,213,144,1) 56%, rgba(197,214,186,1) 78%);
 }
 
 #profile{
     position: absolute;
     top: 50%;
     right: 50%;
-    transform: translate(35%, -50%);
+    transform: translate(45%, -100%);
 }
 
 #profileImage{
     border-radius: 25%;
-    width: 8.5rem;
+    width: 8vw;
 }
-
 #statusImage{
-    width: 3rem;
+    width: 3vw;
     transform: translate(-90%, 40%);
 }
 
 .name{
-    font-size: 2.5em;
+    font-size: 2.2em;
     margin: 0;
     color: rgb(255, 255, 255);
 }
 
 .discriminator{
-    font-size: 1.3em;
+    font-size: 1.1em;
     margin-left: 10px;
     color: rgb(255, 255, 255);
 }
 
 .box{
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.92);
+    background-color: rgba(26, 101, 71, 0.8);
     border-radius: 15%;
-    width: 400px;
-    height: 300px;
+    width: 28vw;
+    height: 40vh;
     z-index: -1;
 }
