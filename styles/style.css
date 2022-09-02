@@ -34,6 +34,14 @@
     transform: translate(-90%, 40%);
 }
 
+#songCover{
+    width: 4vw;
+}
+
+#songName{
+
+}
+
 .name{
     font-size: 2.2em;
     margin: 0;

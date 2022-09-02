@@ -1,5 +1,6 @@
 const socket = new WebSocket("wss://api.lanyard.rest/socket");
 var HEARTBEAT = 30000;
+let isSpotifyStatusExist = false;
 
 socket.addEventListener("open", () => {
     socket.send(
@@ -15,15 +16,29 @@ socket.addEventListener("open", () => {
         const statusData = JSON.parse(data).d;
         console.log(statusData);
     
-        if (statusData.op != 1){
+        if (JSON.parse(data).op != 1){
             profileImage(statusData.discord_user.id, statusData.discord_user.avatar);
             checkDiscordStatus(statusData.discord_status);
     
             if (statusData.discord_status != "offline"){
-                
+                if (statusData.listening_to_spotify){
+                    let cover = document.getElementById('songCover');
+                    cover.setAttribute('src', statusData.spotify.album_art_url);
+
+                    let name = document.getElementById('songName');
+                    name.innerText = statusData.spotify.song;
+
+                    isSpotifyStatusExist = true;
+                }else if (isSpotifyStatusExist){
+                    let cover = document.getElementById('songCover');
+                    cover.setAttribute('src', '');
+                    let name = document.getElementById('songName');
+                    name.innerText = '';
+                    isSpotifyStatusExist = false;
+                }
             }
         }else{
-            HEARTBEAT = message.d.heartbeat_interval;
+            HEARTBEAT = statusData.heartbeat_interval;
         }
         
     });
@@ -37,10 +52,10 @@ socket.addEventListener("open", () => {
     }, HEARTBEAT);
 });
 
-async function checkDiscordStatus(status){
+function checkDiscordStatus(status){
     document.getElementById("statusImage").src = `./images/${status}.png`;
 }
 
-async function profileImage(userId, avatarId){
+function profileImage(userId, avatarId){
     document.getElementById("profileImage").src = `https://cdn.discordapp.com/avatars/${userId}/${avatarId}.png`;
 }
